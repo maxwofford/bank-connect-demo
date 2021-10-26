@@ -1,0 +1,29 @@
+<script>
+  const init = async() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      window.location.href = '/login.html'
+    }
+
+    const orgReq = await fetch(`/org?owner=${token}`)
+    const org = await orgReq.json()
+    if (org.error) {
+      alert(org.error)
+      console.log(org)
+    }
+    if (org) {
+      if (!org.registerURL) {
+        document.querySelector('#status').innerHTML = 'No Fiscal Sponsorship...'
+        const button = document.createElement('button')
+        button.innerText = 'Sign up for an account through HCB'
+        button.onclick = () => {
+          window.location.href = `/signup-for-bank?org=${org.id}`
+        }
+        document.body.appendChild(button)
+
+      }
+    }
+  }
+  init()
+</script>
+<div id="status">Loading...</div>

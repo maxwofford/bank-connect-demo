@@ -1,0 +1,33 @@
+
+<input id="email" type="email" placeholder="spam@spamton.gov" />
+<button onclick="submit()" id="submit">LOGIN</button>
+
+<script>
+  const submit = async () => {
+    const emailInput = document.getElementById('email')
+    const submitButton = document.getElementById('submit')
+    emailInput.disabled = true
+    submitButton.disabled = true
+    const email = document.getElementById('email').value
+    try {
+      const request = await fetch('login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email
+        })
+      })
+      const requestJson = await request.json()
+      localStorage.setItem('token', requestJson.id)
+      emailInput.value = ''
+      window.location.href = '/'
+    } catch (e) {
+      console.log(e)
+    } finally {
+      emailInput.disabled = false
+      submitButton.disabled = false
+    }
+  }
+</script>
